@@ -42,7 +42,6 @@ class Payload(object):
                     time_information[sequence_number] = [sending_time, seconds_since_epoch, nanoseconds_correction]
         return time_information
 
-    @staticmethod
     def _parse_udp_payload(udp_payload):
         # The header is 12 bytes:
         #    sequence_number = 4 bytes
