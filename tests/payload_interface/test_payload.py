@@ -56,9 +56,8 @@ class TestPayloadDataReading(unittest.TestCase):
         self.assertEqual(time_information[28746269], [1567098852792685381, 3825690717, 1705983791])
 
     def test_payload_extraction(self):
-        payload_instance = Payload(self.test_file_path)
         udp_payload = b'\xbbI\xb6\x01\x98k\x01\xfd\xdcs\xbf\x15X\x00\x0b\x00.\x00\x01\x00\t\x00\x97\xc6\xff\xfc\xdcs\xbf\x15\x84\x00\x00 \x00\x01\x00$K\xe3)\n\x01\x00l\x00\x00\x00C\x93\x00\x00\x87\xc0\x91\x01$\x00\x00\x00\x01\x011\x00\x00\x00\x00\x00\x18\x00\x00\x00\x00\x00\x00\x01D\xdd\x88e\x96\x00\x00\x00\xbb7\x81\xbf\x01\x00\x00\x00\x05\x00\x00\x00\x01\x00\x00\x00\xc4\x8b\xae\xf4\x00\xdf\x1e ]h\x06\xdc\x13@\x18\x88\x03\x00(\x11'
-        sequence_number, sending_time, seconds_since_epoch, nanoseconds_correction = payload_instance._parse_udp_payload(udp_payload)
+        sequence_number, sending_time, seconds_since_epoch, nanoseconds_correction = Payload._parse_udp_payload(udp_payload)
 
         expected_sequence_number = 28723643
         expected_sending_time = 1567098588322950040
