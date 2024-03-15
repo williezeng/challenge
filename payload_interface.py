@@ -1,6 +1,6 @@
 import lzma
 from scapy.all import rdpcap, UDP
-from payload_exceptions import PcapFileError
+from payload_exceptions import PcapFileError, IncompleteUDPPayload
 import struct
 
 
@@ -54,7 +54,8 @@ class Payload(object):
         #    unknown = 4 bytes
         # '<' = little-endian, 'I' = unsigned 32 bit int, 'Q' = unsigned 64 bit int
 
-        assert len(udp_payload) >= 32, "UDP payload is too short to contain the required structure."
+        if len(udp_payload) <= 32:
+            raise IncompleteUDPPayload("UDP payload is too short to contain the required structure.")
         header = udp_payload[0:12]
         sequence_number = struct.unpack_from('<I', header, 0)[0]
         sending_time = struct.unpack_from('<Q', header, 4)[0]
