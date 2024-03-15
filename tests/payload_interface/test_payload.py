@@ -43,17 +43,23 @@ class TestPayload(unittest.TestCase):
 class TestPayloadDataReading(unittest.TestCase):
 
     def setUp(self):
-        self.test_data_dir = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), 'test_data')
+        self.test_file_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), 'test_data',
+                         '1567029600000000000_xcme_delta-s1p1-udp_0.0.0.0_0-224.0.31.1_14310-00000000.pcap.xz')
         )
 
     def test_reading_test_data(self):
-        payload_instance = Payload(self.test_data_dir)
-        self.assertEqual(len(payload_instance.file_paths), 2)
-        self.assertIsNotNone(payload_instance.data_a)
-        self.assertIsNotNone(payload_instance.data_b)
+        payload_instance = Payload(self.test_file_path)
+        time_information = payload_instance.get_time_information()
+        import pdb
+        pdb.set_trace()
+    def test_payload_extraction(self):
+        udp_payload = b'\xbbI\xb6\x01\x98k\x01\xfd\xdcs\xbf\x15X\x00\x0b\x00.\x00\x01\x00\t\x00\x97\xc6\xff\xfc\xdcs\xbf\x15\x84\x00\x00 \x00\x01\x00$K\xe3)\n\x01\x00l\x00\x00\x00C\x93\x00\x00\x87\xc0\x91\x01$\x00\x00\x00\x01\x011\x00\x00\x00\x00\x00\x18\x00\x00\x00\x00\x00\x00\x01D\xdd\x88e\x96\x00\x00\x00\xbb7\x81\xbf\x01\x00\x00\x00\x05\x00\x00\x00\x01\x00\x00\x00\xc4\x8b\xae\xf4\x00\xdf\x1e ]h\x06\xdc\x13@\x18\x88\x03\x00(\x11'
+        sequence_number = b'\xbbI\xb6\x01'
+        sending_time = b'\x98k\x01\xfd\xdcs\xbf\x15'
+        seconds_since_epoch = b']h\x06\xdc'
+        nanoseconds_correction = b'\x13@\x18\x88'
 
-
-
+        Payload.get_time_information(udp_payload)
 if __name__ == '__main__':
     unittest.main()
