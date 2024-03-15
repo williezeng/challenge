@@ -31,6 +31,7 @@ class Payload(object):
         packets = rdpcap(self._pcap_path)
         return packets
 
+    @property
     def get_time_information(self):
         time_information = {}
         packets = self._read_pcap_file()
