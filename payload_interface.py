@@ -22,6 +22,13 @@ class Payload(object):
 
     @staticmethod
     def _uncompress_xz_to_pcap(xz_path, pcap_output_path):
+        """
+        Decompresses an .xz file to a pcap file.
+
+        Args:
+            xz_path (str): The path to the .xz compressed file.
+            pcap_output_path (str): The path where the decompressed pcap file should be saved.
+        """
         with lzma.open(xz_path, 'rb') as f:
             file_content = f.read()
         with open(pcap_output_path, 'wb') as f:
@@ -33,6 +40,13 @@ class Payload(object):
 
     @property
     def get_time_information(self):
+        """
+        Extracts time information from each UDP packet in the pcap file.
+
+        Returns:
+            dict: A dictionary mapping sequence numbers to a list containing
+                  sending time, seconds since epoch, and nanoseconds correction.
+        """
         time_information = {}
         packets = self._read_pcap_file()
         for packet in packets:
@@ -46,6 +60,15 @@ class Payload(object):
     @staticmethod
     def _parse_udp_payload(udp_payload):
         """
+        Parses the UDP payload to extract sequence number, sending time, and time correction information.
+        Args:
+            udp_payload (bytes): The UDP payload from which to extract information.
+        Returns:
+            tuple: Contains sequence number, sending time, seconds since epoch, and nanoseconds correction.
+        Raises:
+            IncompleteUDPPayload: If the payload is too short to contain the required structured information.
+
+
         The header is 12 bytes:
             sequence_number = 4 bytes
             sending_time = 8 bytes
@@ -55,9 +78,8 @@ class Payload(object):
             nano_second_correction = 4 bytes
             unknown = 4 bytes
          '<' = little-endian, 'I' = unsigned 32 bit int, 'Q' = unsigned 64 bit int
+
         """
-
-
         if len(udp_payload) <= 32:
             raise IncompleteUDPPayload("UDP payload is too short to contain the required structure.")
         header = udp_payload[0:12]

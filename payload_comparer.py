@@ -21,6 +21,15 @@ def _find_and_prepare_pcap_files(directory_path):
 
 
 def packet_comparison(payload_a, payload_b):
+    """
+    Compares the packet data from two payloads to calculate statistics about packet timing.
+    Args:
+        payload_a (Payload): The first payload object for comparison.
+        payload_b (Payload): The second payload object for comparison.
+    Returns:
+        dict: A dictionary containing statistics about the comparison, including total packets,
+              extra packets, and average speed advantage.
+    """
     packet_comparison_stats = {}
     time_diffs_when_a_faster = []
     time_diffs_when_b_faster = []
