@@ -61,7 +61,7 @@ def main():
         print(f"Error: {e}")
         return
 
-    if args.promote:
+    if args.debug:
         parsed_packets_a = payload_a.get_time_information
         file_name = os.path.join(args.directory_path, 'packet_a.json')
         with open(file_name, "w") as fd:
