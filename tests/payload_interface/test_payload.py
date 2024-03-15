@@ -51,15 +51,25 @@ class TestPayloadDataReading(unittest.TestCase):
     def test_reading_test_data(self):
         payload_instance = Payload(self.test_file_path)
         time_information = payload_instance.get_time_information()
-        import pdb
-        pdb.set_trace()
-    def test_payload_extraction(self):
-        udp_payload = b'\xbbI\xb6\x01\x98k\x01\xfd\xdcs\xbf\x15X\x00\x0b\x00.\x00\x01\x00\t\x00\x97\xc6\xff\xfc\xdcs\xbf\x15\x84\x00\x00 \x00\x01\x00$K\xe3)\n\x01\x00l\x00\x00\x00C\x93\x00\x00\x87\xc0\x91\x01$\x00\x00\x00\x01\x011\x00\x00\x00\x00\x00\x18\x00\x00\x00\x00\x00\x00\x01D\xdd\x88e\x96\x00\x00\x00\xbb7\x81\xbf\x01\x00\x00\x00\x05\x00\x00\x00\x01\x00\x00\x00\xc4\x8b\xae\xf4\x00\xdf\x1e ]h\x06\xdc\x13@\x18\x88\x03\x00(\x11'
-        sequence_number = b'\xbbI\xb6\x01'
-        sending_time = b'\x98k\x01\xfd\xdcs\xbf\x15'
-        seconds_since_epoch = b']h\x06\xdc'
-        nanoseconds_correction = b'\x13@\x18\x88'
+        # sequence number, [sending_time, seconds_since_epoch, nanoseconds_correction]
+        self.assertEqual(time_information[28746229], [1567098852483666925, 3825690717, 3060847644])
+        self.assertEqual(time_information[28746269], [1567098852792685381, 3825690717, 1705983791])
 
-        Payload.get_time_information(udp_payload)
+    def test_payload_extraction(self):
+        payload_instance = Payload(self.test_file_path)
+        udp_payload = b'\xbbI\xb6\x01\x98k\x01\xfd\xdcs\xbf\x15X\x00\x0b\x00.\x00\x01\x00\t\x00\x97\xc6\xff\xfc\xdcs\xbf\x15\x84\x00\x00 \x00\x01\x00$K\xe3)\n\x01\x00l\x00\x00\x00C\x93\x00\x00\x87\xc0\x91\x01$\x00\x00\x00\x01\x011\x00\x00\x00\x00\x00\x18\x00\x00\x00\x00\x00\x00\x01D\xdd\x88e\x96\x00\x00\x00\xbb7\x81\xbf\x01\x00\x00\x00\x05\x00\x00\x00\x01\x00\x00\x00\xc4\x8b\xae\xf4\x00\xdf\x1e ]h\x06\xdc\x13@\x18\x88\x03\x00(\x11'
+        sequence_number, sending_time, seconds_since_epoch, nanoseconds_correction = payload_instance._parse_udp_payload(udp_payload)
+
+        expected_sequence_number = 28723643
+        expected_sending_time = 1567098588322950040
+        expected_seconds_since_epoch = 3691407453
+        expected_nanoseconds_correction = 2283290643
+
+        self.assertEqual(sequence_number, expected_sequence_number)
+        self.assertEqual(sending_time, expected_sending_time)
+        self.assertEqual(seconds_since_epoch, expected_seconds_since_epoch)
+        self.assertEqual(nanoseconds_correction, expected_nanoseconds_correction)
+
+
 if __name__ == '__main__':
     unittest.main()
