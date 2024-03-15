@@ -45,15 +45,18 @@ class Payload(object):
 
     @staticmethod
     def _parse_udp_payload(udp_payload):
-        # The header is 12 bytes:
-        #    sequence_number = 4 bytes
-        #    sending_time = 8 bytes
-        # The trailer is 20 bytes:
-        #    offset = 8 bytes
-        #    seconds_since_epoch = 4 bytes
-        #    nano_second_correction = 4 bytes
-        #    unknown = 4 bytes
-        # '<' = little-endian, 'I' = unsigned 32 bit int, 'Q' = unsigned 64 bit int
+        """
+        The header is 12 bytes:
+            sequence_number = 4 bytes
+            sending_time = 8 bytes
+        The trailer is 20 bytes:
+            offset = 8 bytes
+            seconds_since_epoch = 4 bytes
+            nano_second_correction = 4 bytes
+            unknown = 4 bytes
+         '<' = little-endian, 'I' = unsigned 32 bit int, 'Q' = unsigned 64 bit int
+        """
+
 
         if len(udp_payload) <= 32:
             raise IncompleteUDPPayload("UDP payload is too short to contain the required structure.")

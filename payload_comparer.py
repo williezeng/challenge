@@ -51,7 +51,7 @@ def main():
     # Setup argparse
     parser = argparse.ArgumentParser(description="Analyzes and compares pcap files in a given directory.")
     parser.add_argument("--directory_path", required=True, help="The path to the directory containing .xz pcap files for comparison.")
-    parser.add_argument("--promote", action='store_true', help="If specified, dump packets to files in the directory_path.")
+    parser.add_argument("--debug", action='store_true', help="If specified, dump packets to files in the directory_path.")
 
     args = parser.parse_args()
 
